@@ -65,7 +65,7 @@ async def on_member_join(member):
             picture = discord.File(fobj)
             await member.send(
                 f'Helo {member.mention} hav arrive!\n'
-            f'Please read the <#{RULES_CHANNEL_ID}> first, thanks!',
+                f'Please read the <#{RULES_CHANNEL_ID}> first, thanks!',
                 file=picture)
     except Exception as e:
         logging.error(f"Error sending welcome message: {e}")
