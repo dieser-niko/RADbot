@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  radbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" # Map the exposed port if debugging
+    volumes:
+      - .:/app
+    environment:
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID}
+      DISCORD_DELAYED_ROLE_ID: ${DISCORD_DELAYED_ROLE_ID}
+      DISCORD_RULES_CHANNEL_ID: ${DISCORD_RULES_CHANNEL_ID}
+      DISCORD_WELCOME_CHANNEL_ID: ${DISCORD_WELCOME_CHANNEL_ID}
