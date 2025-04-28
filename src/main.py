@@ -4,6 +4,7 @@ import asyncio
 import logging
 from datetime import datetime, timedelta
 import os
+from PIL import Image, ImageFont, ImageDraw
 
 # Intents setup
 intents = discord.Intents.default()
