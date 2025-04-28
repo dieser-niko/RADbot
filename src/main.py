@@ -21,16 +21,25 @@ WELCOME_CHANNEL_ID = int(os.getenv("DISCORD_WELCOME_CHANNEL_ID"))
 
 logging.basicConfig(level=logging.INFO)
 
-def create_overlay(member):
-    # Example function: implement your custom overlay logic here
-    from PIL import Image, ImageDraw, ImageFont
-
-    base_image = Image.open("media/avatar.png")
-    draw = ImageDraw.Draw(base_image)
-    font = ImageFont.load_default()
-
-    draw.text((10, 10), f"Welcome {member.name}!", fill="white", font=font)
-    base_image.save("media/output.png")
+def create_overlay(user):
+    avatar = Image.open("media/avatar.png")
+    blank = Image.open("media/blank.png")
+    overlay = Image.open("media/overlay.png")
+    font = ImageFont.truetype("fonts/seguibl.ttf", 84)
+    avatar = avatar.resize((216, 216), Image.ANTIALIAS)
+    blank.paste(avatar, (68, 26))
+    blank.paste(overlay, (0, 0), overlay)
+    draw = ImageDraw.Draw(blank)
+    thickness = 2
+    for x in range(thickness):
+        for y in range(thickness):
+            draw.text((350 - (x + 1), -(y + 1)), user.name, font=font, fill=(0, 0, 0, 255))
+            draw.text((350 + x + 1, -(y + 1)), user.name, font=font, fill=(0, 0, 0, 255))
+            draw.text((350 - (x + 1), y + 1), user.name, font=font, fill=(0, 0, 0, 255))
+            draw.text((350 + x + 1, y + 1), user.name, font=font, fill=(0, 0, 0, 255))
+    draw.text((350, 0), user.name, font=font)
+    blank.thumbnail((400, 66))
+    blank.save("media/output.png")
 
 @bot.event
 async def on_ready():
@@ -55,8 +64,8 @@ async def on_member_join(member):
         with open("media/output.png", "rb") as fobj:
             picture = discord.File(fobj)
             await member.send(
-                f'Hello {member.mention}, welcome!\n'
-                f'Please read the <#{RULES_CHANNEL_ID}> first, thanks!',
+                f'Helo {member.mention} hav arrive!\n'
+            f'Please read the <#{RULES_CHANNEL_ID}> first, thanks!',
                 file=picture)
     except Exception as e:
         logging.error(f"Error sending welcome message: {e}")
