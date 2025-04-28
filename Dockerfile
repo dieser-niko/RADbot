@@ -9,10 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
-COPY ./src .
-
-# Expose a port (modify if your app uses a specific port)
-EXPOSE 8000
+COPY src/ .
 
 # Define the command to run your application (modify as needed)
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]

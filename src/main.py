@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands, tasks
 import asyncio
 import logging
-from datetime import datetime, timedelta
+import datetime
 import os
 from PIL import Image, ImageFont, ImageDraw
 
@@ -27,7 +27,7 @@ def create_overlay(user):
     blank = Image.open("media/blank.png")
     overlay = Image.open("media/overlay.png")
     font = ImageFont.truetype("fonts/seguibl.ttf", 84)
-    avatar = avatar.resize((216, 216), Image.ANTIALIAS)
+    avatar = avatar.resize((216, 216), Image.LANCZOS)
     blank.paste(avatar, (68, 26))
     blank.paste(overlay, (0, 0), overlay)
     draw = ImageDraw.Draw(blank)
@@ -94,11 +94,11 @@ async def check_roles():
         logging.error("Delayed role not found")
         return
 
-    now = datetime.utcnow()
+    now = datetime.datetime.now(tz=datetime.UTC)
     for member in guild.members:
-        if delayed_role not in member.roles:
+        if delayed_role not in member.roles and not member.bot:
             time_in_guild = now - member.joined_at
-            if time_in_guild >= timedelta(hours=1):
+            if time_in_guild >= datetime.timedelta(hours=1):
                 await member.add_roles(delayed_role)
                 logging.info(f"Assigned delayed role {delayed_role.name} to {member.name} during daily check")
 
